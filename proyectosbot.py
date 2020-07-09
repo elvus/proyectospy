@@ -34,7 +34,8 @@ def whatsHappening(text, id, urls):
                 whatsHappening(text[index+1:], tuit.id, urls)
         else:
             tuit=api.update_status(text, id)
-            api.update_status("Documentos: \n %s"%(urls), tuit.id)
+            if len(urls):
+                api.update_status("Documentos: \n %s"%(urls), tuit.id)
 
     except tweepy.TweepError as error:
         if error.api_code != 187:
