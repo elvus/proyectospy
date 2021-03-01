@@ -27,13 +27,13 @@ def whatsHappening(text, id, urls):
         if len(text)>280:
             index=text[:280].rfind(" ")
             if id==0:
-                tuit = api.update_status(text[:index])
+                tuit = api.update_status(text[:index].title())
                 whatsHappening(text[index+1:], tuit.id, urls)
             else:
-                tuit = api.update_status(text[:index], id)
+                tuit = api.update_status(text[:index].title(), id)
                 whatsHappening(text[index+1:], tuit.id, urls)
         else:
-            tuit=api.update_status(text, id)
+            tuit=api.update_status(text.title(), id)
             if len(urls):
                 api.update_status("Documentos: \n %s"%(urls), tuit.id)
 
