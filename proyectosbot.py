@@ -10,17 +10,24 @@ api = tweepy.API(auth)
 def maketweet():
     write_output()
     db=connection()
-    tweet=db.proyectos.find({"tweet":False})
-    if tweet.count()!=0:
+    if db.proyectos.count_documents({"tweet":False})!=0:
+        tweet=db.proyectos.find({"tweet":False})
         for i in tweet:
-            text = "%s \nIngreso: %s \n"%(i['acapite'], i['fechaIngresoExpediente']) 
-            whatsHappening(text, 0, '\n'.join(i['urls']))
+            text = "%s \nIngreso: %s \n"%(i['acapite'], i['fechaIngresoExpediente'])
+            if i['urls'] != None:
+                whatsHappening(text, 0, '\n'.join(i['urls']))
+            else:
+                whatsHappening(text, 0, '')
             db.proyectos.update_one(i, {"$set": { "tweet": True}})
     else:
         tweet=db.proyectos.find().sort("_id",-1).limit(5)
         for i in tweet:
-            text = "%s \nIngreso: %s \n"%(i['acapite'], i['fechaIngresoExpediente']) 
-            whatsHappening(text, 0, '\n'.join(i['urls']))
+            text = "%s \nIngreso: %s \n"%(i['acapite'], i['fechaIngresoExpediente'])
+            if i['urls'] != None:
+                whatsHappening(text, 0, '\n'.join(i['urls']))
+            else:
+                whatsHappening(text, 0, '')
+
 
 def whatsHappening(text, id, urls):
     try:
